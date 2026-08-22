@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { HashRouter, Routes, Route, Navigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { HashRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import Sidebar from "./components/Sidebar";
 import Gate from "./pages/Gate";
 import Dashboard from "./pages/Dashboard";
@@ -14,24 +14,42 @@ function hasToken() {
   return Boolean(localStorage.getItem("jurnal_token"));
 }
 
-export default function App() {
-  const [authed, setAuthed] = useState(hasToken());
+function AppShell({ onLock }) {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const location = useLocation();
 
-  if (!authed) {
-    return <Gate onAuth={() => setAuthed(true)} />;
-  }
+  // Tutup drawer otomatis setiap kali pindah halaman
+  useEffect(() => {
+    setMenuOpen(false);
+  }, [location.pathname]);
 
   return (
-    <HashRouter>
-      <div className="flex min-h-screen">
-        <Sidebar />
-        <main className="flex-1 px-10 py-8 overflow-y-auto">
-          <div className="flex justify-end mb-4">
+    <div className="flex min-h-screen">
+      <Sidebar open={menuOpen} onClose={() => setMenuOpen(false)} />
+
+      <div className="flex-1 flex flex-col min-w-0">
+        {/* Top bar hanya tampil di layar kecil */}
+        <header className="lg:hidden sticky top-0 z-20 flex items-center justify-between bg-ink-950/95 backdrop-blur border-b border-ink-700 px-4 py-3">
+          <button
+            onClick={() => setMenuOpen(true)}
+            className="text-paper-100 text-xl leading-none px-1"
+            aria-label="Buka menu"
+          >
+            ≡
+          </button>
+          <p className="font-display text-lg text-paper-100">Ledger</p>
+          <button
+            onClick={onLock}
+            className="text-ink-600 hover:text-ember-400 text-xs font-mono"
+          >
+            kunci
+          </button>
+        </header>
+
+        <main className="flex-1 px-4 py-5 sm:px-6 sm:py-6 lg:px-10 lg:py-8 overflow-y-auto min-w-0">
+          <div className="hidden lg:flex justify-end mb-4">
             <button
-              onClick={() => {
-                clearToken();
-                setAuthed(false);
-              }}
+              onClick={onLock}
               className="text-ink-600 hover:text-ember-400 text-xs font-mono"
             >
               kunci jurnal
@@ -49,6 +67,25 @@ export default function App() {
           </Routes>
         </main>
       </div>
+    </div>
+  );
+}
+
+export default function App() {
+  const [authed, setAuthed] = useState(hasToken());
+
+  if (!authed) {
+    return <Gate onAuth={() => setAuthed(true)} />;
+  }
+
+  return (
+    <HashRouter>
+      <AppShell
+        onLock={() => {
+          clearToken();
+          setAuthed(false);
+        }}
+      />
     </HashRouter>
   );
 }

@@ -14,7 +14,7 @@ export default function Stats() {
 
   return (
     <div className="max-w-4xl">
-      <h1 className="font-display text-2xl text-paper-100 mb-6">Statistik</h1>
+      <h1 className="font-display text-xl sm:text-2xl text-paper-100 mb-4 sm:mb-6">Statistik</h1>
 
       <div className="bg-ink-900 border border-ink-700 rounded p-5 mb-6">
         <p className="text-ink-600 text-xs font-mono uppercase tracking-wide mb-3">Jejak menulis</p>

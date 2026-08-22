@@ -16,7 +16,7 @@ export default function Entries() {
 
   return (
     <div className="max-w-3xl">
-      <h1 className="font-display text-2xl text-paper-100 mb-6">Semua Entri</h1>
+      <h1 className="font-display text-xl sm:text-2xl text-paper-100 mb-4 sm:mb-6">Semua Entri</h1>
 
       <input
         value={q}

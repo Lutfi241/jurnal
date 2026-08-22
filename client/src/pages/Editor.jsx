@@ -55,8 +55,8 @@ export default function Editor() {
 
   return (
     <div className="max-w-2xl">
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="font-display text-2xl text-paper-100">
+      <div className="flex items-center justify-between mb-6 gap-2 flex-wrap">
+        <h1 className="font-display text-xl sm:text-2xl text-paper-100">
           {isEditing ? "Sunting entri" : "Entri baru"}
         </h1>
         <div className="flex items-center gap-3">
